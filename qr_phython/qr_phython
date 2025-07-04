@@ -1,0 +1,21 @@
+import qrcode
+import base64
+from io import BytesIO
+import requests
+
+# Crear QR
+data = "Daniela123"
+img = qrcode.make(data)
+buffer = BytesIO()
+img.save(buffer, format="PNG")
+img_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+# Enviar al backend
+payload = {
+    "nombre": "Daniela Abad",
+    "qrCode": img_base64
+}
+
+res = requests.post("http://localhost:3000/usuarios", json=payload)
+print(res.status_code)
+print(res.text)
